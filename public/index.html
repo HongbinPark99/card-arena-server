@@ -3451,12 +3451,14 @@
                     dealDamage(targetCard, card.atk);
                 }
 
-                addLog(`💥 ${card.name} attacks ${targetCard.name} for ${card.atk} damage!`);
+                const sideText = side === 'player' ? '아군' : '적';
+                addLog(`⚔️ ${sideText} ${card.name}이(가) 공격! (속도: ${card.attackSpeed}) → 💥 ${targetCard.name}에게 ${card.atk} 피해!`);
 
             } else if (action === 'defend') {
                 cardEl?.classList.add('defending');
                 setTimeout(() => cardEl?.classList.remove('defending'), 500);
-                addLog(`🛡️ ${card.name} takes a defensive stance!`);
+                const sideText = side === 'player' ? '아군' : '적';
+                addLog(`🛡️ ${sideText} ${card.name}이(가) 방어 태세! (속도: ${card.defendSpeed})`);
 
             } else if (action === 'special') {
                 cardEl?.classList.add('attacking');
@@ -3473,11 +3475,15 @@
             cardEl?.classList.add('taking-damage');
             setTimeout(() => cardEl?.classList.remove('taking-damage'), 800);
 
+            const beforeHp = card.currentHp;
             card.currentHp = Math.max(0, card.currentHp - damage);
+            
+            addLog(`   └ ${card.name} HP: ${beforeHp} → ${card.currentHp}`);
+            
             if (card.currentHp <= 0) {
                 setTimeout(() => {
                     cardEl?.classList.add('dead');
-                    addLog(`💀 ${card.name} defeated!`, true);
+                    addLog(`💀 ${card.name} 전투불능!`, true);
                 }, 400);
             }
         }
@@ -3485,8 +3491,8 @@
         function performSpecial(side, card, targetId) {
             const oppositeField = side === 'player' ? gameState.enemyField : gameState.playerField;
             const sameField = side === 'player' ? gameState.playerField : gameState.enemyField;
+            const sideText = side === 'player' ? '아군' : '적';
 
-            // 간단한 특수 능력 구현
             if (card.specialType === 'enemy_single') {
                 let target = oppositeField.find(c => c.fieldId === targetId);
                 if (!target || target.currentHp <= 0) {
@@ -3495,10 +3501,21 @@
                 }
                 if (target) {
                     const damage = Math.floor(card.atk * 1.5);
+                    addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💥 ${target.name}에게 ${damage} 피해!`);
                     dealDamage(target, damage);
-                    addLog(`${card.name} uses special on ${target.name} for ${damage} damage!`);
                 }
             } else if (card.specialType === 'self') {
+                const healAmount = 3;
+                card.currentHp = Math.min(card.currentHp + healAmount, card.maxHp);
+                addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💚 자신 HP +${healAmount} 회복!`);
+            } else if (card.specialType === 'auto') {
+                const damage = 2;
+                addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💥 적 전체 ${damage} 피해!`);
+                oppositeField.forEach(c => {
+                    if (c.currentHp > 0) dealDamage(c, damage);
+                });
+            }
+        } else if (card.specialType === 'self') {
                 card.currentHp = Math.min(card.currentHp + 3, card.maxHp);
                 addLog(`${card.name} uses special to heal 3 HP!`);
             } else if (card.specialType === 'auto') {
@@ -3723,37 +3740,67 @@
             });
             
             socket.on('executeBattle', (battleData) => {
-                console.log('Executing battle with data:', battleData);
+                console.log('📡 서버에서 배틀 데이터 수신:', battleData);
                 
-                // Get opponent's actions
                 const mySocketId = socket.id;
-                let opponentActions, opponentData;
+                let myData, opponentData, myActions, opponentActions;
                 
-                if (battleData.player1Actions?.socketId === mySocketId) {
-                    opponentActions = battleData.player2Actions;
+                // 내 데이터와 상대 데이터 구분
+                if (battleData.player1Data?.socketId === mySocketId) {
+                    myData = battleData.player1Data;
                     opponentData = battleData.player2Data;
+                    myActions = battleData.player1Actions;
+                    opponentActions = battleData.player2Actions;
                 } else {
-                    opponentActions = battleData.player1Actions;
+                    myData = battleData.player2Data;
                     opponentData = battleData.player1Data;
+                    myActions = battleData.player2Actions;
+                    opponentActions = battleData.player1Actions;
                 }
                 
-                // Set enemy actions
-                gameState.enemyActions = {};
-                Object.keys(opponentActions).forEach(key => {
-                    if (key !== 'socketId') {
-                        gameState.enemyActions[key] = opponentActions[key];
+                console.log('🎮 내 필드:', myData.playerField);
+                console.log('👿 상대 필드:', opponentData.playerField);
+                
+                // 상대방의 playerField를 내 enemyField로 매핑
+                gameState.enemyField = opponentData.playerField.map((card, idx) => ({
+                    ...card,
+                    fieldId: `e${idx}`,
+                    maxHp: card.maxHp || card.hp
+                }));
+                
+                // 내 playerField는 현재 상태 유지하되 HP만 동기화
+                gameState.playerField.forEach((myCard, idx) => {
+                    const serverCard = myData.playerField[idx];
+                    if (serverCard) {
+                        myCard.currentHp = serverCard.currentHp;
                     }
                 });
                 
-                // Update enemy field if needed
-                if (opponentData && opponentData.playerField) {
-                    gameState.enemyField = opponentData.playerField.map((card, idx) => ({
-                        ...card,
-                        fieldId: `e${idx}`
-                    }));
-                }
+                // 액션 설정
+                gameState.playerActions = {};
+                gameState.enemyActions = {};
                 
-                // Execute battle
+                Object.keys(myActions).forEach(key => {
+                    if (key !== 'socketId') {
+                        gameState.playerActions[key] = myActions[key];
+                    }
+                });
+                
+                Object.keys(opponentActions).forEach(key => {
+                    if (key !== 'socketId') {
+                        // 상대방의 p0, p1, p2를 e0, e1, e2로 변환
+                        const enemyFieldId = key.replace('p', 'e');
+                        gameState.enemyActions[enemyFieldId] = {
+                            ...opponentActions[key],
+                            target: opponentActions[key].target ? opponentActions[key].target.replace('e', 'p') : null
+                        };
+                    }
+                });
+                
+                console.log('✅ 동기화 완료! 배틀 시작');
+                
+                // 필드 렌더링 후 배틀 실행
+                renderBattleField();
                 executeLocalBattle();
             });
             
@@ -3851,20 +3898,42 @@
         // Override executeBattle for online mode
         executeBattle = function() {
             if (onlineGame.active) {
-                // Send actions to server
+                // Send actions and current field state to server
                 const actions = { ...gameState.playerActions };
                 actions.socketId = socket.id;
+
+                // 현재 필드 상태 전송 (HP 포함)
+                const currentFieldState = {
+                    playerField: gameState.playerField.map(c => ({
+                        fieldId: c.fieldId,
+                        id: c.id,
+                        name: c.name,
+                        currentHp: c.currentHp,
+                        maxHp: c.maxHp,
+                        atk: c.atk,
+                        attackSpeed: c.attackSpeed,
+                        defendSpeed: c.defendSpeed,
+                        specialSpeed: c.specialSpeed
+                    })),
+                    enemyField: gameState.enemyField.map(c => ({
+                        fieldId: c.fieldId,
+                        id: c.id,
+                        name: c.name,
+                        currentHp: c.currentHp,
+                        maxHp: c.maxHp
+                    }))
+                };
 
                 socket.emit('submitActions', {
                     roomId: onlineGame.roomId,
                     actions: actions,
                     roundData: {
                         socketId: socket.id,
-                        playerField: gameState.playerField
+                        ...currentFieldState
                     }
                 });
 
-                addLog('⏳ Waiting for opponent...', true);
+                addLog('⏳ 상대방 대기 중...', true);
                 document.getElementById('battleBtn').disabled = true;
             } else {
                 originalExecuteBattle();
