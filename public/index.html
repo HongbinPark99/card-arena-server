@@ -1859,10 +1859,10 @@
                     <label>🎮 Username</label>
                     <input type="text" id="usernameInput" placeholder="Enter your username" maxlength="15">
                 </div>
-                <button class="btn btn-primary" id="loginBtn" onclick="login()">
+                <button class="btn btn-primary" id="loginBtn">
                     <span>LOGIN</span>
                 </button>
-                <button class="btn btn-secondary" id="registerBtn" onclick="register()">
+                <button class="btn btn-secondary" id="registerBtn">
                     <span>CREATE NEW ACCOUNT</span>
                 </button>
             </div>
@@ -2309,11 +2309,15 @@
 
         // ==================== INITIALIZATION ====================
         function init() {
+            console.log('✅ 초기화 시작');
             loadUserData();
             setupEnterKey();
+            console.log('✅ 초기화 완료');
         }
 
         function setupEnterKey() {
+            console.log('🔘 버튼 이벤트 설정 중...');
+            
             const usernameInput = document.getElementById('usernameInput');
             const loginBtn = document.getElementById('loginBtn');
             const registerBtn = document.getElementById('registerBtn');
@@ -2321,18 +2325,36 @@
             if (usernameInput) {
                 usernameInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
+                        console.log('⌨️ Enter 키 눌림');
                         login();
                     }
                 });
+                console.log('✅ Enter 키 이벤트 연결됨');
+            } else {
+                console.error('❌ usernameInput을 찾을 수 없음');
             }
             
             if (loginBtn) {
-                loginBtn.addEventListener('click', login);
+                loginBtn.addEventListener('click', function() {
+                    console.log('🔵 로그인 버튼 클릭됨');
+                    login();
+                });
+                console.log('✅ 로그인 버튼 이벤트 연결됨');
+            } else {
+                console.error('❌ loginBtn을 찾을 수 없음');
             }
             
             if (registerBtn) {
-                registerBtn.addEventListener('click', register);
+                registerBtn.addEventListener('click', function() {
+                    console.log('🟢 회원가입 버튼 클릭됨');
+                    register();
+                });
+                console.log('✅ 회원가입 버튼 이벤트 연결됨');
+            } else {
+                console.error('❌ registerBtn을 찾을 수 없음');
             }
+            
+            console.log('✅ 모든 이벤트 설정 완료');
         }
 
         // ==================== USER MANAGEMENT ====================
@@ -3553,15 +3575,6 @@
                 oppositeField.forEach(c => {
                     if (c.currentHp > 0) dealDamage(c, damage);
                 });
-            }
-        } else if (card.specialType === 'self') {
-                card.currentHp = Math.min(card.currentHp + 3, card.maxHp);
-                addLog(`${card.name} uses special to heal 3 HP!`);
-            } else if (card.specialType === 'auto') {
-                oppositeField.forEach(c => {
-                    if (c.currentHp > 0) dealDamage(c, 2);
-                });
-                addLog(`${card.name} hits all enemies for 2 damage!`);
             }
         }
 
