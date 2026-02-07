@@ -1859,10 +1859,10 @@
                     <label>🎮 Username</label>
                     <input type="text" id="usernameInput" placeholder="Enter your username" maxlength="15">
                 </div>
-                <button class="btn btn-primary" onclick="login()">
+                <button class="btn btn-primary" id="loginBtn" onclick="login()">
                     <span>LOGIN</span>
                 </button>
-                <button class="btn btn-secondary" onclick="register()">
+                <button class="btn btn-secondary" id="registerBtn" onclick="register()">
                     <span>CREATE NEW ACCOUNT</span>
                 </button>
             </div>
@@ -2314,11 +2314,25 @@
         }
 
         function setupEnterKey() {
-            document.getElementById('usernameInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    login();
-                }
-            });
+            const usernameInput = document.getElementById('usernameInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            
+            if (usernameInput) {
+                usernameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        login();
+                    }
+                });
+            }
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', login);
+            }
+            
+            if (registerBtn) {
+                registerBtn.addEventListener('click', register);
+            }
         }
 
         // ==================== USER MANAGEMENT ====================
@@ -2344,25 +2358,33 @@
             const username = document.getElementById('usernameInput').value.trim();
             
             if (!username) {
-                showNotification('Please enter a username', 'error');
+                showNotification('사용자명을 입력하세요', 'error');
                 return;
             }
 
             if (username.length < 3) {
-                showNotification('Username must be at least 3 characters', 'error');
+                showNotification('사용자명은 최소 3글자 이상이어야 합니다', 'error');
                 return;
             }
 
-            const users = JSON.parse(localStorage.getItem('cardArenaUsers') || '{}');
-            
-            if (users[username]) {
-                currentUser = users[username];
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                showScreen('mainMenuScreen');
-                updateUserDisplay();
-                showNotification(`Welcome back, ${username}! ⚔️`, 'success');
-            } else {
-                showNotification('User not found. Please create an account.', 'error');
+            try {
+                const users = JSON.parse(localStorage.getItem('cardArenaUsers') || '{}');
+                
+                if (users[username]) {
+                    currentUser = users[username];
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    console.log('✅ 로그인 성공:', currentUser);
+                    
+                    showScreen('mainMenuScreen');
+                    updateUserDisplay();
+                    showNotification(`다시 오신 것을 환영합니다, ${username}님! ⚔️`, 'success');
+                } else {
+                    showNotification('사용자를 찾을 수 없습니다. 계정을 만들어주세요.', 'error');
+                }
+            } catch (error) {
+                console.error('❌ 로그인 오류:', error);
+                showNotification('로그인 중 오류가 발생했습니다.', 'error');
             }
         }
 
@@ -2370,19 +2392,19 @@
             const username = document.getElementById('usernameInput').value.trim();
             
             if (!username) {
-                showNotification('Please enter a username', 'error');
+                showNotification('사용자명을 입력하세요', 'error');
                 return;
             }
 
             if (username.length < 3) {
-                showNotification('Username must be at least 3 characters', 'error');
+                showNotification('사용자명은 최소 3글자 이상이어야 합니다', 'error');
                 return;
             }
 
             const users = JSON.parse(localStorage.getItem('cardArenaUsers') || '{}');
             
             if (users[username]) {
-                showNotification('Username already exists. Please login.', 'error');
+                showNotification('이미 존재하는 사용자명입니다. 로그인하세요.', 'error');
                 return;
             }
 
@@ -2399,42 +2421,51 @@
                 'tactician'     // 전술가
             ];
 
-            // Create new user
-            currentUser = {
-                username: username,
-                gold: 500,
-                cards: { ...STARTER_CARDS },
-                decks: {
-                    1: {
-                        name: 'Starter Deck',
-                        cards: starterDeck,
-                        createdAt: Date.now()
-                    }
-                },
-                stats: {
-                    wins: 0,
-                    losses: 0,
-                    gamesPlayed: 0
-                },
-                createdAt: Date.now()
-            };
+            try {
+                // Create new user
+                currentUser = {
+                    username: username,
+                    gold: 500,
+                    cards: { ...STARTER_CARDS },
+                    decks: {
+                        1: {
+                            name: 'Starter Deck',
+                            cards: starterDeck,
+                            createdAt: Date.now()
+                        },
+                        2: { name: 'Deck 2', cards: [], createdAt: Date.now() },
+                        3: { name: 'Deck 3', cards: [], createdAt: Date.now() }
+                    },
+                    stats: {
+                        wins: 0,
+                        losses: 0,
+                        gamesPlayed: 0
+                    },
+                    createdAt: Date.now()
+                };
 
-            users[username] = currentUser;
-            localStorage.setItem('cardArenaUsers', JSON.stringify(users));
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            showScreen('mainMenuScreen');
-            updateUserDisplay();
-            showNotification(`Welcome to Card Arena, ${username}! 🎉 Starter Deck ready!`, 'success');
+                users[username] = currentUser;
+                localStorage.setItem('cardArenaUsers', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                console.log('✅ 계정 생성 완료:', currentUser);
+                
+                showScreen('mainMenuScreen');
+                updateUserDisplay();
+                showNotification(`환영합니다, ${username}님! 🎉 스타터 덱이 준비되었습니다!`, 'success');
+            } catch (error) {
+                console.error('❌ 계정 생성 오류:', error);
+                showNotification('계정 생성 중 오류가 발생했습니다.', 'error');
+            }
         }
 
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
+            if (confirm('정말 로그아웃 하시겠습니까?')) {
                 currentUser = null;
                 localStorage.removeItem('currentUser');
                 document.getElementById('usernameInput').value = '';
                 showScreen('loginScreen');
-                showNotification('Logged out successfully', 'success');
+                showNotification('로그아웃되었습니다', 'success');
             }
         }
 
@@ -2442,12 +2473,20 @@
         function updateUserDisplay() {
             if (!currentUser) return;
             
-            document.getElementById('userName').textContent = currentUser.username;
-            document.getElementById('userGold').textContent = currentUser.gold;
+            const userNameEl = document.getElementById('userName');
+            const userGoldEl = document.getElementById('userGold');
+            const userCardsEl = document.getElementById('userCards');
+            const userWinsEl = document.getElementById('userWins');
             
-            const totalCards = Object.values(currentUser.cards).reduce((sum, card) => sum + (card.count || 0), 0);
-            document.getElementById('userCards').textContent = totalCards;
-            document.getElementById('userWins').textContent = currentUser.stats.wins;
+            if (userNameEl) userNameEl.textContent = currentUser.username;
+            if (userGoldEl) userGoldEl.textContent = currentUser.gold;
+            
+            if (userCardsEl) {
+                const totalCards = Object.values(currentUser.cards).reduce((sum, card) => sum + (card.count || 0), 0);
+                userCardsEl.textContent = totalCards;
+            }
+            
+            if (userWinsEl) userWinsEl.textContent = currentUser.stats.wins;
         }
 
         function showScreen(screenId) {
