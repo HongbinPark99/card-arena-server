@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Card Battle Arena - FINAL</title>
+    <title>카드 배틀 아레나</title>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700;900&family=Righteous&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
     <style>
@@ -1352,6 +1352,33 @@
             box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
         }
 
+        /* HP 빗금 바 스타일 */
+        .hp-bars-container {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0 5px;
+        }
+
+        .hp-bar-unit {
+            width: 8px;
+            height: 12px;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hp-bar-unit.filled {
+            background: linear-gradient(135deg, #06d6a0, #4a90e2);
+            box-shadow: 0 0 4px rgba(6, 214, 160, 0.5);
+        }
+
+        .hp-bar-unit.empty {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .action-buttons {
             display: flex;
             gap: 3px;
@@ -1845,6 +1872,251 @@
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(-10px); }
         }
+
+        /* ==================== 모바일 반응형 (최적화) ==================== */
+        @media (max-width: 768px) {
+            /* 전체 레이아웃 */
+            body {
+                font-size: 14px;
+            }
+
+            /* 로그인 화면 */
+            .login-container {
+                margin: 20px 15px;
+                padding: 30px 20px;
+            }
+
+            .login-title {
+                font-size: 2em;
+            }
+
+            .input-group input {
+                padding: 12px;
+                font-size: 16px; /* iOS 줌 방지 */
+            }
+
+            .btn {
+                padding: 15px;
+                font-size: 1.1em;
+            }
+
+            /* 메인 메뉴 */
+            .main-menu {
+                padding: 20px 15px;
+            }
+
+            .game-logo {
+                font-size: 2em;
+            }
+
+            .user-info {
+                padding: 15px;
+            }
+
+            .user-name {
+                font-size: 1.3em;
+            }
+
+            .stat-value {
+                font-size: 1.3em;
+            }
+
+            .menu-buttons {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .menu-btn {
+                padding: 20px;
+                font-size: 1.1em;
+            }
+
+            /* 배틀 화면 */
+            .battle-container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .battle-log-sidebar {
+                order: 2;
+                max-height: 300px;
+                padding: 15px;
+            }
+
+            .battle-main {
+                order: 1;
+            }
+
+            .battle-title {
+                font-size: 1.5em;
+            }
+
+            .round-badge {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            /* 배틀 카드 */
+            .battle-card {
+                min-width: 100px;
+                max-width: 110px;
+                padding: 10px 8px;
+            }
+
+            .battle-card-icon {
+                font-size: 2em;
+            }
+
+            .battle-card-name {
+                font-size: 0.85em;
+            }
+
+            .stat-value {
+                font-size: 1em;
+            }
+
+            .hp-bar-unit {
+                width: 6px;
+                height: 10px;
+            }
+
+            .action-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9em;
+            }
+
+            .speed-num {
+                font-size: 0.7em;
+            }
+
+            /* 카드 선택 모달 */
+            .selection-container {
+                width: 95%;
+                max-width: none;
+                padding: 20px 15px;
+                margin: 10px;
+            }
+
+            .selection-title {
+                font-size: 1.5em;
+            }
+
+            .deck-cards-selection {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .selectable-battle-card {
+                padding: 10px 8px;
+            }
+
+            /* 상점 */
+            .shop-container {
+                padding: 60px 15px 30px;
+            }
+
+            .shop-title {
+                font-size: 2em;
+            }
+
+            .pack-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .pack-card {
+                padding: 20px;
+            }
+
+            /* 컬렉션 */
+            .collection-container {
+                padding: 60px 15px 30px;
+            }
+
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .card-item {
+                padding: 12px;
+            }
+
+            /* 덱 빌더 */
+            .deck-builder-container {
+                padding: 60px 10px 30px;
+            }
+
+            .deck-builder-title {
+                font-size: 2em;
+            }
+
+            .deck-slots {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .builder-main {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .builder-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            /* 팩 오픈 모달 */
+            .pack-opening-content {
+                width: 95%;
+                padding: 20px 15px;
+            }
+
+            .revealed-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            /* 배틀 버튼 */
+            .battle-button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            /* 로그 */
+            .battle-log {
+                font-size: 0.85em;
+            }
+
+            /* 나머지 버튼들 */
+            .back-btn {
+                padding: 10px 20px;
+                font-size: 0.95em;
+            }
+        }
+
+        /* 작은 모바일 (360px 이하) */
+        @media (max-width: 360px) {
+            .battle-card {
+                min-width: 90px;
+                max-width: 95px;
+                padding: 8px 5px;
+            }
+
+            .battle-card-icon {
+                font-size: 1.5em;
+            }
+
+            .deck-cards-selection {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1881,29 +2153,29 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="userCards">0</div>
-                            <div class="stat-label">🎴 Cards</div>
+                            <div class="stat-label">🎴 카드</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="userWins">0</div>
-                            <div class="stat-label">🏆 Wins</div>
+                            <div class="stat-label">🏆 승리</div>
                         </div>
                     </div>
                 </div>
                 <div class="menu-buttons">
                     <button class="menu-btn" onclick="showScreen('shopScreen')">
-                        🛒 SHOP
+                        🛒 상점
                     </button>
                     <button class="menu-btn" onclick="showScreen('collectionScreen')">
-                        📚 COLLECTION
+                        📚 컬렉션
                     </button>
                     <button class="menu-btn" onclick="showScreen('deckBuilderScreen')">
-                        🎴 DECK BUILDER
+                        🎴 덱 빌더
                     </button>
                     <button class="menu-btn" onclick="showScreen('gameModeScreen')">
-                        ⚔️ PLAY GAME
+                        ⚔️ 게임 시작
                     </button>
                     <button class="menu-btn" onclick="logout()">
-                        🚪 LOGOUT
+                        🚪 로그아웃
                     </button>
                 </div>
             </div>
@@ -1913,7 +2185,7 @@
         <div id="shopScreen" class="screen">
             <button class="back-btn" onclick="showScreen('mainMenuScreen')">⬅ Back</button>
             <div class="shop-container">
-                <h1 class="shop-title">🛒 CARD SHOP</h1>
+                <h1 class="shop-title">🛒 카드 상점</h1>
                 <div class="shop-gold-display">
                     <div style="font-size: 1.2em; color: var(--text-dim); margin-bottom: 10px;">Your Gold</div>
                     <div class="shop-gold-amount" id="shopGold">0</div>
@@ -1925,7 +2197,7 @@
         <div id="collectionScreen" class="screen">
             <button class="back-btn" onclick="showScreen('mainMenuScreen')">⬅ Back</button>
             <div class="collection-container">
-                <h1 class="collection-title">📚 MY COLLECTION</h1>
+                <h1 class="collection-title">📚 내 컬렉션</h1>
                 <div class="collection-stats">
                     <div class="collection-stat">
                         <div class="collection-stat-value" id="totalCardsOwned">0</div>
@@ -1947,7 +2219,7 @@
         <div id="deckBuilderScreen" class="screen">
             <button class="back-btn" onclick="showScreen('mainMenuScreen')">⬅ Back</button>
             <div class="deck-builder-container">
-                <h1 class="deck-builder-title">🎴 DECK BUILDER</h1>
+                <h1 class="deck-builder-title">🎴 덱 빌더</h1>
                 
                 <div class="deck-selector" id="deckSelector">
                     <!-- Deck slots will be generated here -->
@@ -2005,21 +2277,21 @@
         </div>
 
         <div id="gameModeScreen" class="screen">
-            <button class="back-btn" onclick="showScreen('mainMenuScreen')">⬅ Back</button>
+            <button class="back-btn" onclick="showScreen('mainMenuScreen')">⬅ 돌아가기</button>
             <div class="game-mode-container">
-                <h1 class="game-mode-title">⚔️ SELECT MODE ⚔️</h1>
+                <h1 class="game-mode-title">⚔️ 모드 선택 ⚔️</h1>
                 <div class="mode-buttons">
                     <div class="mode-btn" onclick="startGame('vsAI')">
-                        <div class="mode-btn-title">🤖 VS AI</div>
-                        <div class="mode-btn-desc">Battle against computer opponent</div>
+                        <div class="mode-btn-title">🤖 AI 대전</div>
+                        <div class="mode-btn-desc">컴퓨터와 대전하기</div>
                     </div>
                     <div class="mode-btn" onclick="startGame('vsPlayer')">
-                        <div class="mode-btn-title">👥 LOCAL VS</div>
-                        <div class="mode-btn-desc">Hot-seat mode on same device</div>
+                        <div class="mode-btn-title">👥 로컬 대전</div>
+                        <div class="mode-btn-desc">같은 기기에서 대전</div>
                     </div>
                     <div class="mode-btn" onclick="startOnlineMatch()">
-                        <div class="mode-btn-title">🌐 ONLINE VS</div>
-                        <div class="mode-btn-desc">Play with friends online!</div>
+                        <div class="mode-btn-title">🌐 온라인 대전</div>
+                        <div class="mode-btn-desc">친구와 온라인 대전!</div>
                     </div>
                 </div>
             </div>
@@ -2028,12 +2300,12 @@
         <!-- Online Waiting Screen -->
         <div id="onlineWaitingScreen" class="screen">
             <div style="text-align: center; padding: 100px 20px;">
-                <h1 style="font-family: 'Righteous'; font-size: 3em; color: var(--accent-gold); margin-bottom: 30px;">🔍 FINDING MATCH...</h1>
-                <p style="font-size: 1.3em; color: var(--text-light); margin-bottom: 20px;" id="onlineStatus">Connecting to server...</p>
+                <h1 style="font-family: 'Righteous'; font-size: 3em; color: var(--accent-gold); margin-bottom: 30px;">🔍 매칭 중...</h1>
+                <p style="font-size: 1.3em; color: var(--text-light); margin-bottom: 20px;" id="onlineStatus">서버 연결 중...</p>
                 <div style="font-size: 1em; color: var(--text-dim); margin-bottom: 40px;">
-                    <div id="serverStatus">⏳ Initializing...</div>
+                    <div id="serverStatus">⏳ 초기화 중...</div>
                 </div>
-                <button class="btn btn-secondary" onclick="cancelOnlineMatch()" style="max-width: 300px;">CANCEL</button>
+                <button class="btn btn-secondary" onclick="cancelOnlineMatch()" style="max-width: 300px;">취소</button>
             </div>
         </div>
 
@@ -2042,17 +2314,17 @@
             <div class="battle-container">
                 <!-- Left Sidebar: Battle Log -->
                 <div class="battle-log-sidebar">
-                    <div class="battle-log-title">📋 BATTLE LOG</div>
+                    <div class="battle-log-title">📋 배틀 로그</div>
                     <div id="battleLog"></div>
                 </div>
 
                 <!-- Main Battle Area -->
                 <div class="battle-main">
                     <div class="battle-header">
-                        <h1 class="battle-title">⚔️ BATTLE ARENA ⚔️</h1>
+                        <h1 class="battle-title">⚔️ 배틀 아레나 ⚔️</h1>
                         <div class="round-info">
                             <div class="round-badge">
-                                Round <span class="score-value" id="currentRound">1</span>/3
+                                라운드 <span class="score-value" id="currentRound">1</span>/3
                             </div>
                             <div class="round-badge">
                                 <span class="score-value" id="playerScore">0</span> : <span class="score-value" id="enemyScore">0</span>
@@ -2061,20 +2333,20 @@
                     </div>
 
                     <div class="battle-arena">
-                        <div class="side-label enemy-label">🔥 ENEMY 🔥</div>
+                        <div class="side-label enemy-label">🔥 적 🔥</div>
                         <div class="cards-row" id="enemyCardsRow"></div>
 
                         <div style="height: 20px; margin: 20px 0; position: relative;">
                             <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 80%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);"></div>
                         </div>
 
-                        <div class="side-label player-label">⚡ YOU ⚡</div>
+                        <div class="side-label player-label">⚡ 나 ⚡</div>
                         <div class="cards-row" id="playerCardsRow"></div>
                     </div>
 
                     <div class="battle-controls">
                         <button class="battle-btn" id="battleBtn" onclick="executeBattle()" disabled>
-                            ⚔️ BATTLE!
+                            ⚔️ 배틀!
                         </button>
                     </div>
                 </div>
@@ -2094,14 +2366,19 @@
         <!-- Card Selection Modal -->
         <div id="cardSelectionModal" class="card-selection-modal">
             <div class="selection-container">
-                <h2 class="selection-title">⚔️ SELECT YOUR TEAM ⚔️</h2>
+                <h2 class="selection-title">⚔️ 배틀 카드 선택 ⚔️</h2>
                 <div class="selection-info">
-                    Choose <span class="selection-count" id="selectionCount">0/3</span> cards for battle
+                    <span class="selection-count" id="selectionCount">0/3</span> 장 선택
                 </div>
                 <div class="deck-cards-selection" id="deckCardsSelection"></div>
-                <button class="confirm-battle-cards-btn" id="confirmBattleCardsBtn" onclick="confirmBattleCards()" disabled>
-                    START BATTLE
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="confirm-battle-cards-btn" id="confirmBattleCardsBtn" onclick="confirmBattleCards()" disabled style="flex: 1;">
+                        ⚔️ 배틀 시작
+                    </button>
+                    <button class="confirm-battle-cards-btn" id="autoSelectBtn" onclick="autoSelectCards()" style="flex: 1; background: linear-gradient(135deg, #06d6a0, #4a90e2); display: none;">
+                        🎯 모두 선택
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -2279,6 +2556,76 @@
                 special: '대상에게 12 피해', 
                 specialType: 'enemy_single', 
                 class: 'ninja', icon: '🌙', rarity: 'legendary'
+            },
+            'necromancer': {
+                name: '네크로맨서', hp: 9, atk: 3,
+                attackSpeed: 2, defendSpeed: 1, specialSpeed: 5,
+                special: '적 전체 2 피해',
+                specialType: 'auto',
+                class: 'necromancer', icon: '💀', rarity: 'epic'
+            },
+            'dragon': {
+                name: '드래곤', hp: 16, atk: 5,
+                attackSpeed: 1, defendSpeed: 1, specialSpeed: 3,
+                special: '적 전체 5 피해',
+                specialType: 'auto',
+                class: 'dragon', icon: '🐉', rarity: 'legendary'
+            },
+            'alchemist': {
+                name: '연금술사', hp: 8, atk: 2,
+                attackSpeed: 3, defendSpeed: 2, specialSpeed: 4,
+                special: '아군 전체 HP +3',
+                specialType: 'self',
+                class: 'alchemist', icon: '⚗️', rarity: 'rare'
+            },
+            'samurai': {
+                name: '사무라이', hp: 11, atk: 5,
+                attackSpeed: 5, defendSpeed: 2, specialSpeed: 7,
+                special: '대상에게 8 피해',
+                specialType: 'enemy_single',
+                class: 'samurai', icon: '⚔️', rarity: 'epic'
+            },
+            'monk': {
+                name: '수도승', hp: 12, atk: 3,
+                attackSpeed: 3, defendSpeed: 1, specialSpeed: 3,
+                special: '자신 HP +6',
+                specialType: 'self',
+                class: 'monk', icon: '🙏', rarity: 'rare'
+            },
+            'elementalist': {
+                name: '정령술사', hp: 8, atk: 4,
+                attackSpeed: 3, defendSpeed: 2, specialSpeed: 5,
+                special: '적 전체 3 피해',
+                specialType: 'auto',
+                class: 'elementalist', icon: '🌊', rarity: 'epic'
+            },
+            'vampire': {
+                name: '뱀파이어', hp: 10, atk: 4,
+                attackSpeed: 4, defendSpeed: 2, specialSpeed: 6,
+                special: '대상 5 피해 + 자신 HP +3',
+                specialType: 'enemy_single',
+                class: 'vampire', icon: '🧛', rarity: 'epic'
+            },
+            'titan': {
+                name: '타이탄', hp: 18, atk: 4,
+                attackSpeed: 1, defendSpeed: 1, specialSpeed: 2,
+                special: '자신 HP +7',
+                specialType: 'self',
+                class: 'titan', icon: '⛰️', rarity: 'legendary'
+            },
+            'archer_elite': {
+                name: '정예 궁수', hp: 10, atk: 5,
+                attackSpeed: 5, defendSpeed: 2, specialSpeed: 7,
+                special: '대상에게 9 피해',
+                specialType: 'enemy_single',
+                class: 'archer_elite', icon: '🎯', rarity: 'rare'
+            },
+            'bard': {
+                name: '음유시인', hp: 9, atk: 2,
+                attackSpeed: 2, defendSpeed: 1, specialSpeed: 3,
+                special: '아군 전체 HP +4',
+                specialType: 'self',
+                class: 'bard', icon: '🎵', rarity: 'rare'
             }
         };
 
@@ -2597,27 +2944,33 @@
             const grid = document.getElementById('deckCardsSelection');
             gameState.selectedBattleCards = [];
 
+            // 모달 제목 업데이트
+            const modalTitle = modal.querySelector('h2');
+            if (modalTitle) {
+                if (gameState.currentRound === 1) {
+                    modalTitle.textContent = '⚔️ 배틀 카드 선택 (3장)';
+                } else {
+                    modalTitle.textContent = `🔄 Round ${gameState.currentRound} - 전체 덱 9장 중 3장 선택 (모든 카드 HP 회복됨!)`;
+                }
+            }
+
             grid.innerHTML = '';
             gameState.fullPlayerDeck.forEach((card, idx) => {
                 const currentHp = card.currentHp !== undefined ? card.currentHp : card.hp;
-                const isDead = currentHp <= 0;
+                const isFullHp = currentHp === card.hp;
                 
                 const cardDiv = document.createElement('div');
-                cardDiv.className = 'selectable-battle-card' + (isDead ? ' disabled' : '');
+                cardDiv.className = 'selectable-battle-card';
                 cardDiv.style.borderColor = RARITY_COLORS[card.rarity];
-                cardDiv.style.opacity = isDead ? '0.3' : '1';
-                
-                if (!isDead) {
-                    cardDiv.onclick = () => toggleBattleCardSelection(idx);
-                }
+                cardDiv.onclick = () => toggleBattleCardSelection(idx);
 
                 cardDiv.innerHTML = `
                     <div style="font-size: 2.5em; margin-bottom: 10px;">${card.icon}</div>
                     <div style="font-weight: 700; color: ${RARITY_COLORS[card.rarity]}; margin-bottom: 5px;">${card.name}</div>
-                    <div style="font-size: 0.85em; color: var(--text-dim);">
+                    <div style="font-size: 0.85em; color: var(--text-dim); margin-bottom: 8px;">
                         HP ${currentHp}/${card.hp} | ATK ${card.atk}
                     </div>
-                    ${isDead ? '<div style="color: var(--accent-red); font-weight: 700; margin-top: 5px;">💀 DEAD</div>' : ''}
+                    ${isFullHp && gameState.currentRound > 1 ? '<div style="color: #06d6a0; font-weight: 700; font-size: 0.85em;">💚 회복 완료!</div>' : ''}
                 `;
 
                 grid.appendChild(cardDiv);
@@ -2628,12 +2981,6 @@
         }
 
         function toggleBattleCardSelection(idx) {
-            const cardData = gameState.fullPlayerDeck[idx];
-            const currentHp = cardData.currentHp !== undefined ? cardData.currentHp : cardData.hp;
-            
-            // 죽은 카드는 선택 불가
-            if (currentHp <= 0) return;
-            
             const cards = document.querySelectorAll('.selectable-battle-card');
             const card = cards[idx];
 
@@ -2653,8 +3000,44 @@
         }
 
         function updateSelectionCount() {
-            document.getElementById('selectionCount').textContent = `${gameState.selectedBattleCards.length}/3`;
-            document.getElementById('confirmBattleCardsBtn').disabled = gameState.selectedBattleCards.length !== 3;
+            const countEl = document.getElementById('selectionCount');
+            const confirmBtn = document.getElementById('confirmBattleCardsBtn');
+            
+            countEl.textContent = `${gameState.selectedBattleCards.length}/3`;
+            confirmBtn.disabled = gameState.selectedBattleCards.length !== 3;
+            
+            // 자동 선택 버튼 표시
+            const autoSelectBtn = document.getElementById('autoSelectBtn');
+            if (autoSelectBtn) {
+                if (gameState.selectedBattleCards.length === 0) {
+                    autoSelectBtn.style.display = 'inline-block';
+                    autoSelectBtn.textContent = '🎲 랜덤 선택';
+                } else {
+                    autoSelectBtn.style.display = 'none';
+                }
+            }
+        }
+        
+        function autoSelectCards() {
+            // 전체 덱에서 랜덤으로 3장 선택
+            const allIndices = gameState.fullPlayerDeck.map((_, idx) => idx);
+            
+            // Fisher-Yates 셔플
+            for (let i = allIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allIndices[i], allIndices[j]] = [allIndices[j], allIndices[i]];
+            }
+            
+            const toSelect = allIndices.slice(0, 3);
+            const cards = document.querySelectorAll('.selectable-battle-card');
+            
+            toSelect.forEach(idx => {
+                gameState.selectedBattleCards.push(idx);
+                cards[idx].classList.add('selected');
+            });
+            
+            updateSelectionCount();
+            showNotification('카드 랜덤 선택 완료!');
         }
 
         function confirmBattleCards() {
@@ -2675,21 +3058,24 @@
         }
 
         function generateEnemyDeck() {
-            // AI용 랜덤 덱 생성
-            const commonCards = Object.entries(CARD_DATA).filter(([_, c]) => c.rarity === 'common');
-            const rareCards = Object.entries(CARD_DATA).filter(([_, c]) => c.rarity === 'rare');
+            // AI용 랜덤 덱 생성 (중복 없음!)
+            const allCards = Object.entries(CARD_DATA);
+            const selectedCards = [];
+            const usedCardIds = new Set();
             
-            const deck = [];
-            for (let i = 0; i < 6; i++) {
-                const randomCommon = commonCards[Math.floor(Math.random() * commonCards.length)];
-                deck.push({ ...randomCommon[1], id: randomCommon[0] });
-            }
-            for (let i = 0; i < 3; i++) {
-                const randomRare = rareCards[Math.floor(Math.random() * rareCards.length)];
-                deck.push({ ...randomRare[1], id: randomRare[0] });
+            // 9장의 서로 다른 카드를 랜덤으로 선택
+            while (selectedCards.length < 9) {
+                const randomCard = allCards[Math.floor(Math.random() * allCards.length)];
+                const cardId = randomCard[0];
+                
+                // 아직 선택되지 않은 카드만 추가
+                if (!usedCardIds.has(cardId)) {
+                    usedCardIds.add(cardId);
+                    selectedCards.push({ ...randomCard[1], id: cardId });
+                }
             }
             
-            return deck;
+            return selectedCards;
         }
 
         function startRound() {
@@ -3164,7 +3550,6 @@
             field.forEach((card, idx) => {
                 const cardDiv = document.createElement('div');
                 const isAlive = card.currentHp > 0;
-                const hpPercent = (card.currentHp / card.maxHp) * 100;
                 
                 cardDiv.id = card.fieldId;
                 cardDiv.className = 'battle-card' + (!isAlive ? ' dead' : '');
@@ -3174,6 +3559,13 @@
                     const actions = side === 'player' ? gameState.playerActions : gameState.enemyActions;
                     const selectedAction = actions[card.fieldId];
                     const specialDisabled = gameState.specialUsed[side][card.fieldId];
+
+                    // HP 빗금 바 생성 (1칸 = 1HP)
+                    let hpBars = '';
+                    for (let i = 0; i < card.maxHp; i++) {
+                        const isFilled = i < card.currentHp;
+                        hpBars += `<div class="hp-bar-unit ${isFilled ? 'filled' : 'empty'}"></div>`;
+                    }
 
                     cardDiv.innerHTML = `
                         <div class="battle-card-header">
@@ -3187,13 +3579,12 @@
                             </div>
                             <div class="stat">
                                 <div class="stat-label">HP</div>
-                                <div class="stat-value hp">${card.currentHp}</div>
+                                <div class="stat-value hp">${card.currentHp}/${card.maxHp}</div>
                             </div>
                         </div>
-                        <div class="health-bar-container">
-                            <div class="health-bar" style="width: ${hpPercent}%"></div>
+                        <div class="hp-bars-container">
+                            ${hpBars}
                         </div>
-                        ${selectedAction ? `<div class="action-indicator ${selectedAction.action}">${selectedAction.action === 'attack' ? '⚔️' : selectedAction.action === 'defend' ? '🛡️' : '✨'}</div>` : ''}
                         ${side === 'player' ? `
                             <div class="action-buttons">
                                 <div class="action-btn attack ${selectedAction?.action === 'attack' ? 'selected' : ''}" 
@@ -3388,7 +3779,20 @@
         }
 
         function executeBattle() {
-            addLog('--- Battle Start! ---', true);
+            addLog('=== ⚔️ 배틀 시작! ===', true);
+            
+            // AI 액션 로그 표시
+            addLog('--- 적 행동 ---', true);
+            gameState.enemyField.forEach(card => {
+                if (card.currentHp > 0 && gameState.enemyActions[card.fieldId]) {
+                    const action = gameState.enemyActions[card.fieldId];
+                    const actionIcon = action.action === 'attack' ? '⚔️' : action.action === 'defend' ? '🛡️' : '✨';
+                    const targetInfo = action.target ? ` → ${action.target}` : '';
+                    addLog(`${card.icon} ${card.name}: ${actionIcon} ${action.action}${targetInfo}`);
+                }
+            });
+            addLog('--- 배틀 진행 ---', true);
+            
             clearArrows();
             
             const actions = [];
@@ -3506,20 +3910,29 @@
 
                     setTimeout(() => {
                         cardEl.style.transform = '';
-                        dealDamage(targetCard, card.atk);
+                        
+                        // 방어 중인지 체크
+                        const oppositeActions = side === 'player' ? gameState.enemyActions : gameState.playerActions;
+                        const targetAction = oppositeActions[targetCard.fieldId];
+                        const isDefending = targetAction?.action === 'defend';
+                        
+                        dealDamage(targetCard, card.atk, isDefending);
                     }, 500);
                 } else {
-                    dealDamage(targetCard, card.atk);
+                    const oppositeActions = side === 'player' ? gameState.enemyActions : gameState.playerActions;
+                    const targetAction = oppositeActions[targetCard.fieldId];
+                    const isDefending = targetAction?.action === 'defend';
+                    dealDamage(targetCard, card.atk, isDefending);
                 }
 
                 const sideText = side === 'player' ? '아군' : '적';
-                addLog(`⚔️ ${sideText} ${card.name}이(가) 공격! (속도: ${card.attackSpeed}) → 💥 ${targetCard.name}에게 ${card.atk} 피해!`);
+                addLog(`[⚡${card.attackSpeed}] ${card.icon} ${sideText} ${card.name} → ⚔️ 공격 → ${targetCard.icon} ${targetCard.name}`);
 
             } else if (action === 'defend') {
                 cardEl?.classList.add('defending');
                 setTimeout(() => cardEl?.classList.remove('defending'), 500);
                 const sideText = side === 'player' ? '아군' : '적';
-                addLog(`🛡️ ${sideText} ${card.name}이(가) 방어 태세! (속도: ${card.defendSpeed})`);
+                addLog(`[⚡${card.defendSpeed}] ${card.icon} ${sideText} ${card.name} → 🛡️ 방어 태세!`);
 
             } else if (action === 'special') {
                 cardEl?.classList.add('attacking');
@@ -3531,20 +3944,27 @@
             setTimeout(() => renderBattleField(), 200);
         }
 
-        function dealDamage(card, damage) {
+        function dealDamage(card, damage, isDefending = false) {
             const cardEl = document.getElementById(card.fieldId);
             cardEl?.classList.add('taking-damage');
             setTimeout(() => cardEl?.classList.remove('taking-damage'), 800);
 
+            // 방어 중이면 데미지 50% 감소 (반올림)
+            const actualDamage = isDefending ? Math.round(damage * 0.5) : damage;
+
             const beforeHp = card.currentHp;
-            card.currentHp = Math.max(0, card.currentHp - damage);
+            card.currentHp = Math.max(0, card.currentHp - actualDamage);
             
-            addLog(`   └ ${card.name} HP: ${beforeHp} → ${card.currentHp}`);
+            if (isDefending) {
+                addLog(`   └ 🛡️ 방어로 ${damage} → ${actualDamage} 피해 감소! ${card.icon} ${card.name} HP: ${beforeHp} → ${card.currentHp}`);
+            } else {
+                addLog(`   └ 💥 ${actualDamage} 피해! ${card.icon} ${card.name} HP: ${beforeHp} → ${card.currentHp}`);
+            }
             
             if (card.currentHp <= 0) {
                 setTimeout(() => {
                     cardEl?.classList.add('dead');
-                    addLog(`💀 ${card.name} 전투불능!`, true);
+                    addLog(`💀 ${card.icon} ${card.name} 전투불능!`, true);
                 }, 400);
             }
         }
@@ -3562,16 +3982,16 @@
                 }
                 if (target) {
                     const damage = Math.floor(card.atk * 1.5);
-                    addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💥 ${target.name}에게 ${damage} 피해!`);
+                    addLog(`[⚡${card.specialSpeed}] ${card.icon} ${sideText} ${card.name} → ✨ 특수능력 → ${target.icon} ${target.name}`);
                     dealDamage(target, damage);
                 }
             } else if (card.specialType === 'self') {
                 const healAmount = 3;
                 card.currentHp = Math.min(card.currentHp + healAmount, card.maxHp);
-                addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💚 자신 HP +${healAmount} 회복!`);
+                addLog(`[⚡${card.specialSpeed}] ${card.icon} ${sideText} ${card.name} → ✨ 특수능력 → 💚 HP +${healAmount} 회복!`);
             } else if (card.specialType === 'auto') {
                 const damage = 2;
-                addLog(`✨ ${sideText} ${card.name} 특수능력! (속도: ${card.specialSpeed}) → 💥 적 전체 ${damage} 피해!`);
+                addLog(`[⚡${card.specialSpeed}] ${card.icon} ${sideText} ${card.name} → ✨ 특수능력 → 💥 적 전체 ${damage} 피해!`);
                 oppositeField.forEach(c => {
                     if (c.currentHp > 0) dealDamage(c, damage);
                 });
@@ -3590,59 +4010,34 @@
                 if (roundWinner === 'player') gameState.playerScore++;
                 else gameState.enemyScore++;
 
-                addLog(`=== Round ${gameState.currentRound} End! ${roundWinner === 'player' ? 'YOU WIN!' : 'Enemy wins!'} ===`, true);
+                addLog(`=== Round ${gameState.currentRound} 종료! ${roundWinner === 'player' ? '승리!' : '적 승리!'} ===`, true);
                 document.getElementById('playerScore').textContent = gameState.playerScore;
                 document.getElementById('enemyScore').textContent = gameState.enemyScore;
 
                 if (gameState.playerScore >= 2 || gameState.enemyScore >= 2) {
                     setTimeout(() => endGame(), 1500);
                 } else {
-                    // 다음 라운드 - 생존 카드 HP 유지
+                    // 다음 라운드 - 모든 카드 HP 완전 회복!
                     gameState.currentRound++;
                     
-                    // 필드의 살아있는 카드들만 새로운 덱으로
-                    const survivingPlayerCards = playerAlive.map(c => {
-                        // 필드 카드의 현재 상태를 그대로 복사 (currentHp 포함)
+                    // 전체 덱의 모든 카드 HP 풀로 회복
+                    gameState.fullPlayerDeck = gameState.fullPlayerDeck.map(card => {
                         return {
-                            id: c.id,
-                            name: c.name,
-                            hp: c.maxHp,  // 원본 최대 HP
-                            currentHp: c.currentHp,  // 현재 남은 HP (중요!)
-                            atk: c.atk,
-                            attackSpeed: c.attackSpeed,
-                            defendSpeed: c.defendSpeed,
-                            specialSpeed: c.specialSpeed,
-                            special: c.special,
-                            specialType: c.specialType,
-                            class: c.class,
-                            icon: c.icon,
-                            rarity: c.rarity
+                            ...card,
+                            currentHp: card.hp  // HP 완전 회복!
                         };
                     });
                     
-                    // fullPlayerDeck을 생존 카드로 완전 교체
-                    gameState.fullPlayerDeck = survivingPlayerCards;
-                    
-                    console.log('Surviving cards:', survivingPlayerCards.map(c => `${c.name} HP:${c.currentHp}/${c.hp}`));
+                    addLog('💚 라운드 종료! 모든 카드 HP 완전 회복!', true);
+                    console.log('All cards healed:', gameState.fullPlayerDeck.map(c => `${c.name} HP:${c.currentHp}/${c.hp}`));
                     
                     setTimeout(() => {
-                        if (survivingPlayerCards.length >= 3) {
-                            // 3장 이상이면 선택
-                            showCardSelectionModal();
-                        } else if (survivingPlayerCards.length > 0) {
-                            // 3장 미만이면 전부 사용
-                            gameState.selectedBattleCards = survivingPlayerCards.map((_, idx) => idx);
-                            gameState.playerDeck = survivingPlayerCards.map(c => ({...c})); // 깊은 복사
-                            startRound();
-                        } else {
-                            // 생존 카드 없으면 패배
-                            gameState.enemyScore = 2;
-                            endGame();
-                        }
+                        // 항상 전체 덱에서 3장 선택
+                        showCardSelectionModal();
                     }, 2000);
                 }
             } else {
-                addLog('Next turn...', true);
+                addLog('=== 다음 턴 ===', true);
                 gameState.playerActions = {};
                 gameState.enemyActions = {};
                 selectEnemyActions();
